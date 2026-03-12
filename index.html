@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raphael Omotosho — Software Engineer & Systems Architect</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --void: #050505;
+            --ink: #0a0a0a;
+            --surface: #111111;
+            --elevated: #1a1a1a;
+            --white: #ffffff;
+            --gray: #a0a0a0;
+            --muted: #444444;
+            --red: #ef4444;
+            --red-dim: rgba(239, 68, 68, 0.1);
+            --gold: #f59e0b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--void);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--void);
+            color: var(--white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Premium noise texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.025;
+            z-index: -1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--surface);
+            z-index: 100;
+            padding: 0 5%;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .resume-btn {
+            background: var(--red);
+            color: var(--white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid var(--red);
+        }
+
+        .resume-btn:hover {
+            background: transparent;
+            color: var(--red);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 5% 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 50%, rgba(239, 68, 68, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--surface);
+            border-radius: 4px;
+            background: var(--ink);
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 5vw, 5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-title .line {
+            display: block;
+        }
+
+        .hero-title .accent {
+            color: var(--red);
+            text-shadow: 0 0 60px rgba(239, 68, 68, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--surface);
+            border-bottom: 1px solid var(--surface);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--void);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--white);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--white);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-secondary {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .btn-secondary:hover {
+            color: var(--red);
+        }
+
+        /* Hero Visual — Architecture Diagram */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .architecture-diagram {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .arch-node {
+            position: absolute;
+            background: var(--surface);
+            border: 1px solid var(--muted);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .arch-node:hover {
+            border-color: var(--red);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+
+        .arch-node.central {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--red-dim);
+            border-color: var(--red);
+            font-weight: 600;
+        }
+
+        .arch-node:nth-child(2) { top: 10%; left: 20%; }
+        .arch-node:nth-child(3) { top: 10%; right: 20%; }
+        .arch-node:nth-child(4) { bottom: 20%; left: 10%; }
+        .arch-node:nth-child(5) { bottom: 20%; right: 10%; }
+        .arch-node:nth-child(6) { top: 40%; left: 5%; }
+        .arch-node:nth-child(7) { top: 40%; right: 5%; }
+
+        .connection {
+            position: absolute;
+            background: var(--muted);
+            opacity: 0.3;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 100px 5%;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--surface);
+            padding-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title span {
+            color: var(--red);
+        }
+
+        .section-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 5rem;
+        }
+
+        .about-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            background: var(--surface);
+            border: 1px solid var(--elevated);
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--surface), var(--elevated));
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid var(--elevated);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--red);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .profile-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-contact a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .profile-contact a:hover {
+            color: var(--white);
+        }
+
+        .profile-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .profile-links a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--elevated);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .profile-links a:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: var(--red-dim);
+        }
+
+        .about-content h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            line-height: 1.4;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content em {
+            color: var(--white);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Skills — Enterprise Stacked */
+        .skills-container {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .skill-tier {
+            background: var(--surface);
+            border: 1px solid var(--elevated);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: var(--ink);
+            border-bottom: 1px solid var(--elevated);
+        }
+
+        .skill-title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--red-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .skill-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .skill-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .skill-level {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--red);
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--elevated);
+            border-radius: 4px;
+        }
+
+        .skill-body {
+            padding: 1.5rem;
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-cat-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .skill-tag {
+            background: var(--ink);
+            border: 1px solid var(--elevated);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--white);
+            transition: all 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--red);
+            color: var(--red);
+            transform: translateY(-2px);
+        }
+
+        .skill-tag.enterprise {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .skill-tag.enterprise:hover {
+            background: var(--gold);
+            color: var(--void);
+        }
+
+        /* Currently Learning */
+        .learning-tier {
+            background: linear-gradient(135deg, var(--surface), var(--ink));
+            border: 1px dashed var(--muted);
+        }
+
+        .learning-tier .skill-header {
+            background: transparent;
+        }
+
+        .learning-tier .skill-icon {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* Projects — Enterprise Focus */
+        .projects {
+            background: var(--ink);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--elevated);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--red);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .project-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--elevated);
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .project-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--red);
+            padding: 0.4rem 0.8rem;
+            background: var(--red-dim);
+            border-radius: 4px;
+        }
+
+        .project-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--white);
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-impact {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--ink);
+            border-radius: 6px;
+        }
+
+        .impact-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .impact-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .impact-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gray);
+            padding: 0.3rem 0.6rem;
+            border: 1px solid var(--elevated);
+            border-radius: 4px;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .contact-info h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .contact-info h2 span {
+            color: var(--red);
+        }
+
+        .contact-info > p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            max-width: 500px;
+        }
+
+        .contact-email {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-email a {
+            color: var(--white);
+            text-decoration: none;
+            border-bottom: 2px solid var(--red);
+            padding-bottom: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .contact-email a:hover {
+            color: var(--red);
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .contact-btn {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-btn.primary {
+            background: var(--red);
+            color: var(--white);
+            border: 1px solid var(--red);
+        }
+
+        .contact-btn.primary:hover {
+            background: transparent;
+        }
+
+        .contact-btn.secondary {
+            background: var(--surface);
+            color: var(--white);
+            border: 1px solid var(--elevated);
+        }
+
+        .contact-btn.secondary:hover {
+            border-color: var(--red);
+        }
+
+        .contact-visual {
+            height: 400px;
+            background: var(--surface);
+            border: 1px solid var(--elevated);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-visual::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 2px solid var(--red);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: pulse-ring 4s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.2; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .contact-visual::after {
+            content: '→';
+            font-size: 5rem;
+            color: var(--red);
+            opacity: 0.3;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid var(--surface);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--red);
+        }
+
+        /* Mobile */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-visual {
+                height: 350px;
+                order: -1;
+            }
+
+            .arch-node:nth-child(6), .arch-node:nth-child(7) {
+                display: none;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-sidebar {
+                position: static;
+            }
+
+            .skills-container {
+                gap: 1rem;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">raphael<span>.dev</span></a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#expertise">Expertise</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="resume.pdf" class="resume-btn" download>↓ Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">Available for Opportunities</div>
+                <h1 class="hero-title">
+                    <span class="line">Systems <span class="accent">Architect</span></span>
+                    <span class="line">& Software <span class="accent">Engineer</span></span>
+                </h1>
+                <p class="hero-subtitle">
+                    I design and build enterprise-grade infrastructure that scales. From distributed systems to core platform engineering, I turn complex technical challenges into reliable, high-performance solutions.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">99.9%</span>
+                        <span class="stat-label">Uptime Target</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">50ms</span>
+                        <span class="stat-label">API Latency</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">10M+</span>
+                        <span class="stat-label">Requests/Day</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <a href="#work" class="btn-primary">View Case Studies</a>
+                    <a href="#contact" class="btn-secondary">
+                        [ schedule_call ]
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="architecture-diagram">
+                    <div class="arch-node central">Core Platform</div>
+                    <div class="arch-node">Load Balancer</div>
+                    <div class="arch-node">API Gateway</div>
+                    <div class="arch-node">Database Cluster</div>
+                    <div class="arch-node">Cache Layer</div>
+                    <div class="arch-node">Message Queue</div>
+                    <div class="arch-node">Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">About <span>/</span> Profile</h2>
+                <span class="section-meta">Enterprise Architecture • System Design</span>
+            </div>
+            <div class="about-grid">
+                <aside class="about-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar">👨‍💻</div>
+                        <div class="profile-name">Raphael Omotosho</div>
+                        <div class="profile-role">Systems Architect</div>
+                        <div class="profile-contact">
+                            <a href="mailto:romotosho10@gmail.com">romotosho10@gmail.com</a>
+                            <a href="#">github.com/raphael</a>
+                        </div>
+                        <div class="profile-links">
+                            <a href="#" title="GitHub">GH</a>
+                            <a href="#" title="Twitter">X</a>
+                            <a href="resume.pdf" title="Resume" download>CV</a>
+                        </div>
+                    </div>
+                </aside>
+                <div class="about-content">
+                    <h3>Engineering for scale, designing for resilience.</h3>
+                    <p>
+                        I'm a software engineer specializing in <em>enterprise architecture</em> and <em>distributed systems</em>. My expertise spans the full stack — from low-level system administration to high-level platform design — with a focus on building infrastructure that organizations can bet their business on.
+                    </p>
+                    <p>
+                        I've designed systems handling <em>millions of daily requests</em>, implemented <em>zero-downtime deployments</em>, and architected <em>fault-tolerant platforms</em> that maintain 99.9% availability. My approach combines deep technical knowledge with strategic thinking about business requirements, cost optimization, and long-term maintainability.
+                    </p>
+                    <p>
+                        Currently completing advanced coursework in <em>cloud-native architecture</em> while consulting on platform engineering projects. Seeking opportunities to lead technical infrastructure for high-growth organizations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="expertise">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Technical <span>/</span> Expertise</h2>
+                <span class="section-meta">Stacked by Competency Level</span>
+            </div>
+            
+            <div class="skills-container">
+                <!-- Enterprise Backend -->
+                <div class="skill-tier">
+                    <div class="skill-header">
+                        <div class="skill-title-group">
+                            <div class="skill-icon">🏗️</div>
+                            <div>
+                                <div class="skill-title">Enterprise Backend & Architecture</div>
+                                <div class="skill-subtitle">Core competency — Production-grade systems</div>
+                            </div>
+                        </div>
+                        <span class="skill-level">Expert</span>
+                    </div>
+                    <div class="skill-body">
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Languages & Frameworks</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Go</span>
+                                <span class="skill-tag">Rust</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">gRPC</span>
+                                <span class="skill-tag">GraphQL</span>
+                                <span class="skill-tag">REST APIs</span>
+                                <span class="skill-tag">WebSockets</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Data & Messaging</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">MongoDB</span>
+                                <span class="skill-tag">Redis</span>
+                                <span class="skill-tag">Kafka</span>
+                                <span class="skill-tag">RabbitMQ</span>
+                                <span class="skill-tag">Elasticsearch</span>
+                                <span class="skill-tag">ClickHouse</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Enterprise Patterns</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag enterprise">Microservices</span>
+                                <span class="skill-tag enterprise">Event Sourcing</span>
+                                <span class="skill-tag enterprise">CQRS</span>
+                                <span class="skill-tag enterprise">Saga Pattern</span>
+                                <span class="skill-tag enterprise">Circuit Breaker</span>
+                                <span class="skill-tag enterprise">Rate Limiting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Systems & Infrastructure -->
+                <div class="skill-tier">
+                    <div class="skill-header">
+                        <div class="skill-title-group">
+                            <div class="skill-icon">⚙️</div>
+                            <div>
+                                <div class="skill-title">Systems Administration & DevOps</div>
+                                <div class="skill-subtitle">Infrastructure as code — Automated operations</div>
+                            </div>
+                        </div>
+                        <span class="skill-level">Advanced</span>
+                    </div>
+                    <div class="skill-body">
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Cloud & Virtualization</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">AWS</span>
+                                <span class="skill-tag">GCP</span>
+                                <span class="skill-tag">Kubernetes</span>
+                                <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">Terraform</span>
+                                <span class="skill-tag">Pulumi</span>
+                                <span class="skill-tag">VMware</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-cat-title">CI/CD & Automation</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">GitHub Actions</span>
+                                <span class="skill-tag">GitLab CI</span>
+                                <span class="skill-tag">Jenkins</span>
+                                <span class="skill-tag">ArgoCD</span>
+                                <span class="skill-tag">Ansible</span>
+                                <span class="skill-tag">Puppet</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Monitoring & Security</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Prometheus</span>
+                                <span class="skill-tag">Grafana</span>
+                                <span class="skill-tag">Datadog</span>
+                                <span class="skill-tag">ELK Stack</span>
+                                <span class="skill-tag">Vault</span>
+                                <span class="skill-tag">OIDC/OAuth2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Core Software Engineering -->
+                <div class="skill-tier">
+                    <div class="skill-header">
+                        <div class="skill-title-group">
+                            <div class="skill-icon">🔧</div>
+                            <div>
+                                <div class="skill-title">Core Software Engineering</div>
+                                <div class="skill-subtitle">Fundamentals — Algorithms to deployment</div>
+                            </div>
+                        </div>
+                        <span class="skill-level">Expert</span>
+                    </div>
+                    <div class="skill-body">
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Computer Science</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">System Design</span>
+                                <span class="skill-tag">Distributed Systems</span>
+                                <span class="skill-tag">Concurrency</span>
+                                <span class="skill-tag">Networking</span>
+                                <span class="skill-tag">Database Internals</span>
+                                <span class="skill-tag">Operating Systems</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <div class="skill-cat-title">Engineering Practices</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">TDD</span>
+                                <span class="skill-tag">Clean Architecture</span>
+                                <span class="skill-tag">DDD</span>
+                                <span class="skill-tag">Agile/Scrum</span>
+                                <span class="skill-tag">Technical Writing</span>
+                                <span class="skill-tag">Code Review</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frontend -->
+                <div class="skill-tier">
+                    <div class="skill-header">
+                        <div class="skill-title-group">
+                            <div class="skill-icon">🎨</div>
+                            <div>
+                                <div class="skill-title">Frontend Engineering</div>
+                                <div class="skill-subtitle">Performance-focused interfaces</div>
+                            </div>
+                        </div>
+                        <span class="skill-level">Proficient</span>
+                    </div>
+                    <div class="skill-body">
+                        <div class="skill-tags">
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">Next.js</span>
+                            <span class="skill-tag">TypeScript</span>
+                            <span class="skill-tag">Tailwind CSS</span>
+                            <span class="skill-tag">WebAssembly</span>
+                            <span class="skill-tag">Performance Optimization</span>
+                            <span class="skill-tag">Accessibility</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currently Learning -->
+                <div class="skill-tier learning-tier">
+                    <div class="skill-header">
+                        <div class="skill-title-group">
+                            <div class="skill-icon" style="color: var(--gold);">🚀</div>
+                            <div>
+                                <div class="skill-title">Currently Learning</div>
+                                <div class="skill-subtitle">Expanding into emerging technologies</div>
+                            </div>
+                        </div>
+                        <span class="skill-level" style="color: var(--gold); border-color: var(--gold);">In Progress</span>
+                    </div>
+                    <div class="skill-body">
+                        <div class="skill-tags">
+                            <span class="skill-tag" style="border-color: var(--gold); color: var(--gold);">Machine Learning Ops (MLOps)</span>
+                            <span class="skill-tag" style="border-color: var(--gold); color: var(--gold);">Web3 & Smart Contracts</span>
+                            <span class="skill-tag" style="border-color: var(--gold); color: var(--gold);">eBPF & Kernel Programming</span>
+                            <span class="skill-tag" style="border-color: var(--gold); color: var(--gold);">FinTech & High-Frequency Trading</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="work">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise <span>/</span> Projects</h2>
+                <span class="section-meta">Architecture • Scale • Reliability</span>
+            </div>
+            <div class="project-grid">
+                <article class="project-card">
+                    <div class="project-header">
+                        <span class="project-type">Distributed Systems</span>
+                        <span class="project-year">2025</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Multi-Region Payment Platform</h3>
+                        <p class="project-desc">Architected event-driven payment processing system handling $50M+ monthly transaction volume across 3 geographic regions with automatic failover and ACID compliance.</p>
+                        <div class="project-impact">
+                            <div class="impact-item">
+                                <span class="impact-value">99.99%</span>
+                                <span class="impact-label">Availability</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value"><50ms</span>
+                                <span class="impact-label">P95 Latency</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value">Zero</span>
+                                <span class="impact-label">Data Loss</span>
+                            </div>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag">Go</span>
+                            <span class="tech-tag">Kafka</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">Terraform</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <span class="project-type">Platform Engineering</span>
+                        <span class="project-year">2024</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Internal Developer Platform</h3>
+                        <p class="project-desc">Built self-service infrastructure platform enabling 50+ developers to deploy microservices with automated CI/CD, monitoring, and security compliance.</p>
+                        <div class="project-impact">
+                            <div class="impact-item">
+                                <span class="impact-value">80%</span>
+                                <span class="impact-label">Deploy Time ↓</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value">100%</span>
+                                <span class="impact-label">Compliance</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value">24/7</span>
+                                <span class="impact-label">Auto-Healing</span>
+                            </div>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">ArgoCD</span>
+                            <span class="tech-tag">Vault</span>
+                            <span class="tech-tag">Prometheus</span>
+                            <span class="tech-tag">Backstage</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <span class="project-type">System Administration</span>
+                        <span class="project-year">2024</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Zero-Trust Security Infrastructure</h3>
+                        <p class="project-desc">Implemented organization-wide zero-trust network with identity-aware proxies, mTLS everywhere, and automated threat detection and response.</p>
+                        <div class="project-impact">
+                            <div class="impact-item">
+                                <span class="impact-value">-95%</span>
+                                <span class="impact-label">Attack Surface</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value"><1min</span>
+                                <span class="impact-label">Threat Response</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value">SOC2</span>
+                                <span class="impact-label">Compliant</span>
+                            </div>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag">Istio</span>
+                            <span class="tech-tag">Vault</span>
+                            <span class="tech-tag">Falco</span>
+                            <span class="tech-tag">OpenPolicyAgent</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <span class="project-type">Data Engineering</span>
+                        <span class="project-year">2024</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Real-Time Analytics Pipeline</h3>
+                        <p class="project-desc">Designed stream processing architecture ingesting 100K+ events/second with sub-second query latency for business intelligence dashboards.</p>
+                        <div class="project-impact">
+                            <div class="impact-item">
+                                <span class="impact-value">100K+</span>
+                                <span class="impact-label">Events/Sec</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value"><1s</span>
+                                <span class="impact-label">Query Latency</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value">$200K</span>
+                                <span class="impact-label">Cost Saved/Yr</span>
+                            </div>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag">Kafka</span>
+                            <span class="tech-tag">Flink</span>
+                            <span class="tech-tag">ClickHouse</span>
+                            <span class="tech-tag">Grafana</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2>Let's architect your next <span>platform</span>.</h2>
+                    <p>I'm currently available for senior engineering roles, consulting engagements, and advisory positions. If you're building mission-critical infrastructure, I'd love to discuss how I can help.</p>
+                    <div class="contact-email">
+                        <a href="mailto:romotosho10@gmail.com">romotosho10@gmail.com</a>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="resume.pdf" class="contact-btn primary" download>
+                            ↓ Download Resume
+                        </a>
+                        <a href="#" class="contact-btn secondary">
+                            [ view_github ]
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-visual"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <span>© 2025 Raphael Omotosho — Systems Architect</span>
+            <div class="footer-links">
+                <a href="resume.pdf" download>Resume</a>
+                <a href="#">GitHub</a>
+                <a href="#">Email</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
